@@ -11,13 +11,39 @@
       "updatedAt": "2026-10-18T06:26:33.716Z",
       "expiresAt": null,
       "maxUses": null,
-      "usesCount": 0,
+      "usesCount": 1,
       "maxDevices": null,
-      "devices": {},
-      "lastUsedAt": null
+      "devices": {
+        "1639780f918d3ba990e89e7eeac9b4b657145c8914c30a56e98c865750a1abc8": {
+          "firstSeen": "2026-10-18T06:26:34.879Z",
+          "lastSeen": "2026-10-18T06:26:34.879Z",
+          "verifies": 1,
+          "meta": {
+            "app": "E2E"
+          }
+        }
+      },
+      "lastUsedAt": "2026-10-18T06:26:34.879Z"
     }
   },
   "logs": [
+    {
+      "ts": "2026-10-18T06:26:34.879Z",
+      "type": "verify_ok",
+      "key": "SHADOW-WSEC7-GMVHG-ZMQHW",
+      "device": "1639780f918d",
+      "uses": 1,
+      "devices": 1
+    },
+    {
+      "ts": "2026-10-18T06:26:34.879Z",
+      "type": "device_activated",
+      "key": "SHADOW-WSEC7-GMVHG-ZMQHW",
+      "device": "1639780f918d3ba990e89e7eeac9b4b657145c8914c30a56e98c865750a1abc8",
+      "meta": {
+        "app": "E2E"
+      }
+    },
     {
       "ts": "2026-10-18T06:26:33.716Z",
       "type": "key_created",
