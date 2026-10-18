@@ -1,11 +1,4 @@
 {
-  "ignore": [
-    "data/*",
-    "scripts/*",
-    "node_modules/*",
-    ".git/*",
-    "*.md"
-  ],
   "functions": {
     "api/**": {
       "maxDuration": 30

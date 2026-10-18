@@ -1,0 +1,8 @@
+data/
+scripts/
+node_modules/
+.git/
+*.md
+.gitignore
+.env
+.env.*
