@@ -1,38 +1,14 @@
 {
   "version": 1,
-  "keys": {
-    "SHADOW-WSEC7-GMVHG-ZMQHW": {
-      "id": "k_29a7201b9b6b",
-      "key": "SHADOW-WSEC7-GMVHG-ZMQHW",
-      "source": "auto",
-      "status": "active",
-      "note": "gh-mode live test",
-      "createdAt": "2026-10-18T06:26:33.716Z",
-      "updatedAt": "2026-10-18T06:26:33.716Z",
-      "expiresAt": null,
-      "maxUses": null,
-      "usesCount": 2,
-      "maxDevices": null,
-      "devices": {
-        "1639780f918d3ba990e89e7eeac9b4b657145c8914c30a56e98c865750a1abc8": {
-          "firstSeen": "2026-10-18T06:26:34.879Z",
-          "lastSeen": "2026-10-18T06:26:34.879Z",
-          "verifies": 1,
-          "meta": {
-            "app": "E2E"
-          }
-        },
-        "ee99731d2be1c03bb9139b606fffe084687bd7bc8d0e366b0e62aced067decff": {
-          "firstSeen": "2026-10-18T06:26:35.905Z",
-          "lastSeen": "2026-10-18T06:26:35.905Z",
-          "verifies": 1,
-          "meta": null
-        }
-      },
-      "lastUsedAt": "2026-10-18T06:26:35.905Z"
-    }
-  },
+  "keys": {},
   "logs": [
+    {
+      "ts": "2026-10-18T06:26:43.874Z",
+      "type": "key_deleted",
+      "key": "SHADOW-WSEC7-GMVHG-ZMQHW",
+      "uses": 2,
+      "devices": 2
+    },
     {
       "ts": "2026-10-18T06:26:35.905Z",
       "type": "verify_ok",
