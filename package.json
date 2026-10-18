@@ -1,0 +1,13 @@
+{
+  "name": "shadow-license-server",
+  "version": "1.0.0",
+  "private": true,
+  "description": "SHADOW — self-hosted license key server (Vercel + GitHub storage)",
+  "main": "scripts/local-server.js",
+  "scripts": {
+    "start": "node scripts/local-server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

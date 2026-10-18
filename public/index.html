@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SHADOW — License Server</title>
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230a0a12'/%3E%3Cpath d='M8 22 24 8h-9l-7 7h9l-9 9z' fill='%238b5cf6'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="/app.css">
+</head>
+<body>
+
+  <!-- ================= LOGIN ================= -->
+  <div id="login-view" class="login-wrap hidden">
+    <div class="login-card">
+      <div class="brand-lg">
+        <div class="brand-mark-lg">◢</div>
+        <h1>SHADOW</h1>
+        <p>License Key Server</p>
+      </div>
+      <form id="login-form" autocomplete="on">
+        <label for="pw">Admin password</label>
+        <input type="password" id="pw" autocomplete="current-password" placeholder="••••••••••••" required>
+        <div id="login-error" class="error"></div>
+        <button type="submit" class="btn primary wide">Unlock panel</button>
+      </form>
+      <p class="muted small">App API base: <code id="api-base" class="api-base"></code></p>
+    </div>
+    <p class="muted small login-foot">keys · devices · usage · SHADOW</p>
+  </div>
+
+  <!-- ================= APP ================= -->
+  <div id="app-view" class="hidden">
+    <header class="topbar">
+      <div class="brand"><span class="brand-mark">◢</span><span class="brand-name">SHADOW</span><span class="brand-sub">license server</span></div>
+      <nav class="tabs" id="tabs">
+        <button data-tab="dashboard" class="active">Dashboard</button>
+        <button data-tab="keys">Keys</button>
+        <button data-tab="devices">Devices</button>
+        <button data-tab="activity">Activity</button>
+      </nav>
+      <div class="topbar-right">
+        <button id="docs-btn" class="btn ghost sm">API docs</button>
+        <button id="logout-btn" class="btn ghost sm">Log out</button>
+      </div>
+    </header>
+
+    <main>
+      <!-- ---------- DASHBOARD ---------- -->
+      <section id="tab-dashboard" class="tab active">
+        <div id="stat-cards" class="cards"></div>
+        <div class="grid-2">
+          <div class="panel">
+            <h3>Quick verify test</h3>
+            <p class="muted small">Sends a real activation to the live API. A valid check consumes <b>1 use</b> and registers the device.</p>
+            <div class="row">
+              <input id="test-key" placeholder="SHADOW-XXXXX-XXXXX-XXXXX">
+              <input id="test-device" placeholder="device-id (e.g. my-pc-01)">
+              <button id="test-btn" class="btn primary">Verify</button>
+            </div>
+            <pre id="test-out" class="code hidden"></pre>
+          </div>
+          <div class="panel">
+            <h3>Recent activity <button id="dash-refresh" class="btn ghost sm" title="Refresh">↻</button></h3>
+            <div id="recent-logs" class="loglist"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ---------- KEYS ---------- -->
+      <section id="tab-keys" class="tab">
+        <div class="toolbar">
+          <input id="key-search" placeholder="Search keys…">
+          <button id="create-btn" class="btn primary">+ Create key</button>
+        </div>
+        <div class="panel table-panel">
+          <table class="table">
+            <thead>
+              <tr><th>Key</th><th>Status</th><th>Expires</th><th>Uses</th><th>Devices</th><th>Last used</th><th class="th-actions"></th></tr>
+            </thead>
+            <tbody id="keys-tbody"></tbody>
+          </table>
+          <div id="keys-empty" class="empty hidden">No keys yet. Click <b>+ Create key</b> to generate your first one.</div>
+        </div>
+      </section>
+
+      <!-- ---------- DEVICES ---------- -->
+      <section id="tab-devices" class="tab">
+        <div class="panel table-panel">
+          <table class="table">
+            <thead>
+              <tr><th>Device</th><th>Key</th><th>First seen</th><th>Last seen</th><th>Checks</th><th>Info</th></tr>
+            </thead>
+            <tbody id="devices-tbody"></tbody>
+          </table>
+          <div id="devices-empty" class="empty hidden">No devices activated yet.</div>
+        </div>
+      </section>
+
+      <!-- ---------- ACTIVITY ---------- -->
+      <section id="tab-activity" class="tab">
+        <div class="toolbar">
+          <select id="log-filter">
+            <option value="">All events</option>
+            <option value="verify_ok">Verifications — OK</option>
+            <option value="verify_fail">Verifications — failed</option>
+            <option value="device_activated">New devices</option>
+            <option value="key_created">Keys created</option>
+            <option value="key_updated">Keys updated</option>
+            <option value="key_deleted">Keys deleted</option>
+          </select>
+          <label class="check"><input type="checkbox" id="log-autorefresh" checked> Auto-refresh (15 s)</label>
+          <span class="spacer"></span>
+          <button id="logs-refresh" class="btn ghost sm">↻ Refresh</button>
+        </div>
+        <div class="panel table-panel">
+          <table class="table">
+            <thead><tr><th>Time</th><th>Event</th><th>Key</th><th>Details</th></tr></thead>
+            <tbody id="logs-tbody"></tbody>
+          </table>
+          <div id="logs-empty" class="empty hidden">No events logged yet.</div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- ================= CREATE KEY MODAL ================= -->
+  <div id="modal-create" class="modal-wrap hidden">
+    <div class="modal-backdrop" data-close></div>
+    <div class="modal">
+      <div class="modal-head"><h3>Create license key</h3><button class="x" data-close title="Close">×</button></div>
+
+      <div id="create-form-view">
+        <div class="seg">
+          <button id="mode-auto" class="active">Auto&nbsp;(SHADOW-…)</button>
+          <button id="mode-custom">Custom key</button>
+        </div>
+
+        <div id="auto-fields">
+          <label>Prefix</label>
+          <div class="row">
+            <input id="c-prefix" value="SHADOW" maxlength="20" spellcheck="false">
+            <button id="c-regen" class="btn ghost sm" title="New random preview">⟳ preview</button>
+          </div>
+          <label>Preview</label>
+          <div class="keybox" id="c-preview">SHADOW-XXXXX-XXXXX-XXXXX</div>
+        </div>
+
+        <div id="custom-fields" class="hidden">
+          <label>Custom key</label>
+          <input id="c-custom" placeholder="e.g. SHADOW-MYAPP-LIFETIME" spellcheck="false">
+          <p class="muted small">A–Z, 0–9, dashes, underscores · 8–80 chars · stored in uppercase (keys are case-insensitive)</p>
+        </div>
+
+        <div class="form-grid">
+          <div><label>Expires</label><input type="datetime-local" id="c-expiry"></div>
+          <div class="check-row"><label class="check"><input type="checkbox" id="c-expiry-never" checked> Never</label></div>
+        </div>
+        <div class="form-grid">
+          <div><label>Max uses (API checks)</label><input type="number" id="c-maxuses" min="1" placeholder="unlimited" disabled></div>
+          <div class="check-row"><label class="check"><input type="checkbox" id="c-maxuses-inf" checked> Unlimited</label></div>
+        </div>
+        <div class="form-grid">
+          <div><label>Max devices</label><input type="number" id="c-maxdevices" min="1" placeholder="unlimited" disabled></div>
+          <div class="check-row"><label class="check"><input type="checkbox" id="c-maxdevices-inf" checked> Unlimited</label></div>
+        </div>
+        <label>Note <span class="muted">(optional)</span></label>
+        <input id="c-note" placeholder="e.g. Acme trial — 30 days">
+        <div id="create-error" class="error"></div>
+      </div>
+
+      <div id="create-success" class="hidden">
+        <p class="muted">Your new key is ready:</p>
+        <div class="keybox big" id="created-key"></div>
+        <div class="row">
+          <button id="copy-created" class="btn primary">Copy key</button>
+          <button id="test-created" class="btn ghost">Test it</button>
+          <button class="btn ghost" data-close>Done</button>
+        </div>
+      </div>
+
+      <div class="modal-foot" id="create-foot">
+        <button class="btn ghost" data-close>Cancel</button>
+        <button id="create-submit" class="btn primary">Create key</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MANAGE KEY MODAL ================= -->
+  <div id="modal-manage" class="modal-wrap hidden">
+    <div class="modal-backdrop" data-close></div>
+    <div class="modal wide">
+      <div class="modal-head"><h3>Manage key</h3><button class="x" data-close title="Close">×</button></div>
+
+      <div class="keybox big" id="m-key"></div>
+      <div class="chips" id="m-chips"></div>
+
+      <div class="form-grid">
+        <div><label>Expires</label><input type="datetime-local" id="m-expiry"></div>
+        <div class="check-row"><label class="check"><input type="checkbox" id="m-expiry-never"> Never</label></div>
+      </div>
+      <div class="form-grid">
+        <div><label>Max uses</label><input type="number" id="m-maxuses" min="1" placeholder="unlimited"></div>
+        <div class="check-row"><label class="check"><input type="checkbox" id="m-maxuses-inf"> Unlimited</label></div>
+      </div>
+      <div class="form-grid">
+        <div><label>Max devices</label><input type="number" id="m-maxdevices" min="1" placeholder="unlimited"></div>
+        <div class="check-row"><label class="check"><input type="checkbox" id="m-maxdevices-inf"> Unlimited</label></div>
+      </div>
+      <label>Note</label>
+      <input id="m-note" placeholder="note about this key">
+
+      <div class="row wrap">
+        <button id="m-save" class="btn primary">Save changes</button>
+        <button id="m-toggle-status" class="btn ghost"></button>
+        <button id="m-reset-uses" class="btn ghost" title="Set used count back to 0">Reset uses</button>
+        <button id="m-clear-devices" class="btn ghost" title="Remove all activated devices (they can re-activate)">Clear devices</button>
+      </div>
+      <div id="m-error" class="error"></div>
+
+      <h4>Devices <span id="m-device-count" class="muted"></span></h4>
+      <div class="dev-table-wrap">
+        <table class="table sm">
+          <thead><tr><th>Device (hashed)</th><th>First seen</th><th>Last seen</th><th>Checks</th><th>Info</th></tr></thead>
+          <tbody id="m-devices"></tbody>
+        </table>
+        <div id="m-devices-empty" class="empty hidden">No devices activated with this key yet.</div>
+      </div>
+
+      <div class="modal-foot danger">
+        <span class="spacer"></span>
+        <button id="m-delete" class="btn danger">Delete key</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= DOCS MODAL ================= -->
+  <div id="modal-docs" class="modal-wrap hidden">
+    <div class="modal-backdrop" data-close></div>
+    <div class="modal wide">
+      <div class="modal-head"><h3>API docs — how your apps check in</h3><button class="x" data-close title="Close">×</button></div>
+      <div class="docs">
+        <p>Base URL: <code id="docs-base"></code></p>
+        <h4>1. Activate / check in (consumes 1 use, registers the device)</h4>
+        <pre class="code">POST /api/license/verify
+Content-Type: application/json
+
+{
+  "apiKey":   "SHADOW-XXXXX-XXXXX-XXXXX",
+  "deviceId": "my-pc-01",
+  "deviceMeta": { "app": "MyApp", "appVersion": "1.2.0", "platform": "windows" }
+}</pre>
+        <h4>2. Status check (consumes nothing)</h4>
+        <pre class="code">GET /api/license/verify?apiKey=SHADOW-XXXXX-XXXXX-XXXXX</pre>
+        <h4>Response (valid)</h4>
+        <pre class="code">{ "valid": true, "key": "SHADOW-…", "expiresAt": null,
+  "usesUsed": 3, "usesLeft": null, "deviceCount": 1,
+  "maxDevices": null, "deviceRegistered": true, "message": "OK" }</pre>
+        <h4>Response (invalid)</h4>
+        <pre class="code">{ "valid": false, "reason": "expired",
+  "message": "This license has expired.", … }</pre>
+        <p class="muted small">
+          <code>reason</code> is one of: <code>invalid_key</code>, <code>revoked</code>, <code>expired</code>,
+          <code>max_uses</code>, <code>max_devices</code>.
+          <br><br>
+          Use a <b>stable, unique device id</b> per machine (e.g. a UUID you generate once and store in app
+          settings, or a hash of the hardware id). Device ids are hashed with SHA-256 before storage.
+          <br><br>
+          Full guide + code snippets (JS / Python): see <code>README.md</code> in the GitHub repo.
+        </p>
+      </div>
+      <div class="modal-foot">
+        <span class="spacer"></span>
+        <button class="btn ghost" data-close>Close</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast hidden"></div>
+
+  <script src="/app.js"></script>
+</body>
+</html>

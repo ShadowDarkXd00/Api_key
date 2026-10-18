@@ -1,0 +1,19 @@
+{
+  "ignore": [
+    "data/*",
+    "scripts/*",
+    "node_modules/*",
+    ".git/*",
+    "*.md"
+  ],
+  "functions": {
+    "api/**": {
+      "maxDuration": 30
+    }
+  },
+  "routes": [
+    { "src": "/data/.*", "status": 403 },
+    { "src": "/scripts/.*", "status": 403 },
+    { "src": "/README.md", "status": 403 }
+  ]
+}
