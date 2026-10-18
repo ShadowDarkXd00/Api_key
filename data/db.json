@@ -1,5 +1,28 @@
 {
   "version": 1,
-  "keys": {},
-  "logs": []
+  "keys": {
+    "SHADOW-WSEC7-GMVHG-ZMQHW": {
+      "id": "k_29a7201b9b6b",
+      "key": "SHADOW-WSEC7-GMVHG-ZMQHW",
+      "source": "auto",
+      "status": "active",
+      "note": "gh-mode live test",
+      "createdAt": "2026-10-18T06:26:33.716Z",
+      "updatedAt": "2026-10-18T06:26:33.716Z",
+      "expiresAt": null,
+      "maxUses": null,
+      "usesCount": 0,
+      "maxDevices": null,
+      "devices": {},
+      "lastUsedAt": null
+    }
+  },
+  "logs": [
+    {
+      "ts": "2026-10-18T06:26:33.716Z",
+      "type": "key_created",
+      "key": "SHADOW-WSEC7-GMVHG-ZMQHW",
+      "source": "auto"
+    }
+  ]
 }
