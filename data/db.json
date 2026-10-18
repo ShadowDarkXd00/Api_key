@@ -1,51 +1,5 @@
 {
   "version": 1,
   "keys": {},
-  "logs": [
-    {
-      "ts": "2026-10-18T06:26:43.874Z",
-      "type": "key_deleted",
-      "key": "SHADOW-WSEC7-GMVHG-ZMQHW",
-      "uses": 2,
-      "devices": 2
-    },
-    {
-      "ts": "2026-10-18T06:26:35.905Z",
-      "type": "verify_ok",
-      "key": "SHADOW-WSEC7-GMVHG-ZMQHW",
-      "device": "ee99731d2be1",
-      "uses": 2,
-      "devices": 2
-    },
-    {
-      "ts": "2026-10-18T06:26:35.905Z",
-      "type": "device_activated",
-      "key": "SHADOW-WSEC7-GMVHG-ZMQHW",
-      "device": "ee99731d2be1c03bb9139b606fffe084687bd7bc8d0e366b0e62aced067decff",
-      "meta": null
-    },
-    {
-      "ts": "2026-10-18T06:26:34.879Z",
-      "type": "verify_ok",
-      "key": "SHADOW-WSEC7-GMVHG-ZMQHW",
-      "device": "1639780f918d",
-      "uses": 1,
-      "devices": 1
-    },
-    {
-      "ts": "2026-10-18T06:26:34.879Z",
-      "type": "device_activated",
-      "key": "SHADOW-WSEC7-GMVHG-ZMQHW",
-      "device": "1639780f918d3ba990e89e7eeac9b4b657145c8914c30a56e98c865750a1abc8",
-      "meta": {
-        "app": "E2E"
-      }
-    },
-    {
-      "ts": "2026-10-18T06:26:33.716Z",
-      "type": "key_created",
-      "key": "SHADOW-WSEC7-GMVHG-ZMQHW",
-      "source": "auto"
-    }
-  ]
+  "logs": []
 }
